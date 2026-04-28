@@ -1,0 +1,49 @@
+# Core dependencies
+openai>=1.0.0
+python-dotenv>=1.0.0
+pyyaml>=6.0
+
+# Audio processing
+sounddevice>=0.4.6
+soundfile>=0.12.1
+numpy>=1.24.0
+scipy>=1.10.0
+webrtcvad>=2.0.10
+pyaudio>=0.2.13
+
+# Speech to text
+openai-whisper>=20231117
+faster-whisper>=0.10.0
+
+# Speaker diarization
+pyannote.audio>=3.1.0
+torch>=2.0.0
+torchaudio>=2.0.0
+
+# NLP and embeddings
+sentence-transformers>=2.2.0
+chromadb>=0.4.0
+
+# Database
+sqlalchemy>=2.0.0
+aiosqlite>=0.19.0
+
+# CLI and UI
+click>=8.1.0
+rich>=13.0.0
+tqdm>=4.65.0
+
+# Integrations
+jira>=3.5.0
+asana>=4.0.0
+
+# Utilities
+pydantic>=2.0.0
+aiohttp>=3.8.0
+python-dateutil>=2.8.0
+tenacity>=8.2.0
+
+# Development
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+black>=23.0.0

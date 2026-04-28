@@ -1,0 +1,168 @@
+# Always-On Meeting Intelligence Configuration
+
+# Audio capture settings
+audio:
+  # Input source: "system", "microphone", or "both"
+  input: "both"
+  
+  # Voice activity detection sensitivity (0.0 - 1.0)
+  # Lower = more sensitive, Higher = less sensitive
+  sensitivity: 0.3
+  
+  # Audio sample rate in Hz
+  sample_rate: 16000
+  
+  # Audio chunk duration in seconds
+  chunk_duration: 0.5
+  
+  # Silence duration to consider speech ended (seconds)
+  silence_threshold: 2.0
+  
+  # Minimum meeting duration to save (seconds)
+  min_meeting_duration: 30
+  
+  # Audio format for recordings
+  recording_format: "wav"
+
+# AI and transcription settings
+ai:
+  # OpenAI API key (can also use OPENAI_API_KEY env variable)
+  openai_api_key: ""
+  
+  # GPT model for notes generation and action extraction
+  model: "gpt-4o"
+  
+  # Whisper model size: tiny, base, small, medium, large
+  whisper_model: "base"
+  
+  # Use local Whisper or OpenAI API
+  whisper_local: true
+  
+  # Speaker diarization model
+  diarization_model: "pyannote/speaker-diarization-3.1"
+  
+  # Maximum speakers to identify
+  max_speakers: 10
+  
+  # Embedding model for semantic search
+  embedding_model: "all-MiniLM-L6-v2"
+
+# Storage settings
+storage:
+  # Path for audio recordings
+  recordings_path: "./data/recordings"
+  
+  # Path for transcripts
+  transcripts_path: "./data/transcripts"
+  
+  # SQLite database path
+  database_path: "./data/meetings.db"
+  
+  # Vector database path (ChromaDB)
+  vector_db_path: "./data/vector_db"
+  
+  # Auto-delete recordings after (days, 0 = never)
+  retention_days: 90
+
+# Meeting detection settings
+detection:
+  # Auto-start when voice detected
+  auto_start: true
+  
+  # Minimum voice duration to trigger recording (seconds)
+  min_voice_duration: 3.0
+  
+  # Keywords that indicate meeting start
+  meeting_keywords:
+    - "let's begin"
+    - "shall we start"
+    - "meeting"
+    - "call"
+    - "standup"
+    - "sync"
+
+# Notes generation settings
+notes:
+  # Generate summary after meeting ends
+  auto_generate: true
+  
+  # Summary style: "brief", "detailed", "bullet"
+  summary_style: "detailed"
+  
+  # Include speaker attribution in notes
+  include_speakers: true
+  
+  # Maximum summary length (words)
+  max_summary_length: 500
+
+# Action item extraction settings
+actions:
+  # Auto-extract action items
+  auto_extract: true
+  
+  # Keywords that indicate action items
+  action_keywords:
+    - "action item"
+    - "todo"
+    - "task"
+    - "need to"
+    - "should"
+    - "will do"
+    - "by tomorrow"
+    - "deadline"
+    - "assigned to"
+    - "take care of"
+    - "follow up"
+
+# Integration settings
+integrations:
+  # Jira integration
+  jira:
+    enabled: false
+    url: "https://your-domain.atlassian.net"
+    email: ""
+    api_token: ""
+    project_key: "MEET"
+    default_issue_type: "Task"
+  
+  # Asana integration
+  asana:
+    enabled: false
+    api_token: ""
+    workspace_gid: ""
+    project_gid: ""
+
+# Query interface settings
+query:
+  # Number of results to return
+  top_k: 5
+  
+  # Minimum similarity score (0.0 - 1.0)
+  min_similarity: 0.5
+  
+  # Include context window (characters before/after)
+  context_window: 200
+
+# Logging settings
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "./data/logs/meeting_agent.log"
+  max_size_mb: 50
+  backup_count: 5
+
+# Notification settings
+notifications:
+  # Desktop notifications
+  desktop: true
+  
+  # Sound alerts
+  sound: false
+  
+  # Notify on meeting start
+  on_meeting_start: true
+  
+  # Notify on meeting end
+  on_meeting_end: true
+  
+  # Notify on action items detected
+  on_action_items: true
