@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="A comprehensive comparison of the top AI coding assistant tools: GitHub Copilot, Claude Code, Cursor, Gemini Code Assist, Amazon Q, and more.">
+    <title>AI Coding Assistants | Ultimate Comparison 2026</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="background-effects">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <header class="navbar">
+        <div class="logo">
+            <span class="logo-icon"><i class="fa-solid fa-code"></i></span>
+            <h1>AI<span class="gradient-text">Assist</span>Compare</h1>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#stats">Stats</a></li>
+                <li><a href="#tools">Tools</a></li>
+                <li><a href="#comparison">Matrix</a></li>
+            </ul>
+        </nav>
+        <div class="nav-actions">
+            <button id="refresh-btn" class="refresh-button" title="Refresh data">
+                <i class="fa-solid fa-rotate"></i>
+                <span class="refresh-text">Refresh</span>
+            </button>
+            <button id="mobile-menu-btn" class="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <div id="mobile-nav" class="mobile-nav">
+        <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#stats">Stats</a></li>
+            <li><a href="#tools">Tools</a></li>
+            <li><a href="#comparison">Matrix</a></li>
+        </ul>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero fade-in">
+            <div class="hero-content">
+                <span class="badge">April 2026 Edition</span>
+                <h2 class="hero-title">The Future of <span class="gradient-text">Software Engineering</span></h2>
+                <p class="hero-subtitle">Discover, compare, and choose the perfect AI coding assistant for your
+                    workflow. From real-time completions to autonomous agentic reasoning.</p>
+                <div class="hero-cta-group">
+                    <a href="#tools" class="cta-button">Explore Tools <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#comparison" class="cta-button secondary">View Matrix <i class="fa-solid fa-table-columns"></i></a>
+                </div>
+                <div class="last-updated-hero">
+                    <i class="fa-solid fa-clock"></i>
+                    <span id="hero-timestamp">Loading...</span>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="code-window">
+                    <div class="window-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="window-title">ai-assistant.ts</span>
+                    </div>
+                    <pre class="code-content"><code><span class="keyword">const</span> <span class="function">optimizeWorkflow</span> = <span class="keyword">async</span> (<span class="variable">assistant</span>) => {
+  <span class="keyword">if</span> (!assistant.isAgentic) {
+    <span class="keyword">await</span> user.typeCode();
+  } <span class="keyword">else</span> {
+    <span class="keyword">await</span> assistant.solveProblem();
+    user.review();
+  }
+  <span class="keyword">return</span> <span class="string">"10x Productivity"</span>;
+};</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Stats Section -->
+        <section id="stats" class="stats-section fade-in">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-robot"></i></div>
+                    <div class="stat-content">
+                        <span id="stat-tools-count" class="stat-number">0</span>
+                        <span class="stat-label">AI Tools Compared</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-microchip"></i></div>
+                    <div class="stat-content">
+                        <span id="stat-agentic-count" class="stat-number">0</span>
+                        <span class="stat-label">Agentic Capable</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-gift"></i></div>
+                    <div class="stat-content">
+                        <span id="stat-free-count" class="stat-number">0</span>
+                        <span class="stat-label">With Free Tier</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fa-solid fa-code-branch"></i></div>
+                    <div class="stat-content">
+                        <span id="stat-categories-count" class="stat-number">0</span>
+                        <span class="stat-label">Categories</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tools Deep Dive Section -->
+        <section id="tools" class="tools-section">
+            <div class="section-header fade-in">
+                <h2>Top 6 AI Coding Assistants</h2>
+                <p>The most impactful tools for developers in 2026 — click any card to expand</p>
+            </div>
+
+            <!-- Simple Filters -->
+            <div class="filter-container fade-in">
+                <div class="filter-buttons" id="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="IDE Extension">IDE Extension</button>
+                    <button class="filter-btn" data-filter="AI-First IDE">AI-First IDE</button>
+                    <button class="filter-btn" data-filter="CLI Agent">CLI Agent</button>
+                </div>
+                <div class="filter-actions">
+                    <button id="expand-all-btn" class="expand-all-btn">
+                        <i class="fa-solid fa-expand"></i> Expand All
+                    </button>
+                    <div class="search-box">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="tool-search" placeholder="Search...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Handled dynamically by script.js -->
+            <div id="dynamic-tools-grid" class="tools-grid"></div>
+            
+            <div id="no-results" class="no-results" style="display: none;">
+                <i class="fa-solid fa-search"></i>
+                <p>No tools found matching your criteria</p>
+            </div>
+        </section>
+
+        <!-- Feature Matrix -->
+        <section id="comparison" class="matrix-section fade-in">
+            <div class="section-header">
+                <h2>Comprehensive Comparison Matrix</h2>
+                <p>A breakdown of core capabilities across platforms</p>
+            </div>
+
+            <!-- Matrix Controls -->
+            <div class="matrix-controls">
+                <div class="matrix-info">
+                    <span id="visible-tools-count">0</span> tools displayed
+                </div>
+                <button id="export-btn" class="export-btn" title="Export comparison">
+                    <i class="fa-solid fa-download"></i> Export
+                </button>
+            </div>
+
+            <!-- Handled dynamically by script.js -->
+            <div id="dynamic-table-container" class="table-container"></div>
+
+            <div class="timestamp-container">
+                <div class="timestamp-note">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Data source: <strong id="data-source-indicator" class="data-source-badge">Loading...</strong></span>
+                </div>
+                <div class="last-updated">
+                    <i class="fa-solid fa-clock"></i>
+                    <span>Updated: </span>
+                    <strong id="last-updated-timestamp">Loading...</strong>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>AI<span class="gradient-text">Assist</span>Compare</h2>
+                <p>Empowering developers to choose the right tools.</p>
+            </div>
+            <div class="footer-stats">
+                <div class="footer-stat">
+                    <span id="footer-tools-count">0</span>
+                    <label>Tools</label>
+                </div>
+                <div class="footer-stat">
+                    <span id="footer-features-count">13</span>
+                    <label>Features Compared</label>
+                </div>
+            </div>
+            <div class="footer-links">
+                <a href="#hero">Back to Top</a>
+                <a href="#" id="refresh-footer-btn">Refresh Data</a>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 AI Assist Compare. Built for the modern coding era. 
+            <span class="version">v2.0</span>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Fetching latest AI tool data...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fa-solid fa-check-circle"></i>
+        <span id="toast-message">Data refreshed successfully!</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
