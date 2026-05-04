@@ -1,0 +1,9 @@
+Name,Designation,Manager,Email,Phone,Department,Location
+John Smith,CEO,,john@company.com,+1-555-0100,Executive,New York
+Jane Doe,CTO,John Smith,jane@company.com,+1-555-0101,Engineering,San Francisco
+Bob Wilson,VP Engineering,Jane Doe,bob@company.com,+1-555-0102,Engineering,Austin
+Alice Brown,VP Product,John Smith,alice@company.com,+1-555-0103,Product,New York
+Charlie Davis,Senior Engineer,Bob Wilson,charlie@company.com,+1-555-0104,Engineering,Austin
+Diana Evans,Product Manager,Alice Brown,diana@company.com,+1-555-0105,Product,Remote
+Frank Garcia,Engineer,Bob Wilson,frank@company.com,+1-555-0106,Engineering,San Francisco
+Grace Harris,Designer,Alice Brown,grace@company.com,+1-555-0107,Design,New York

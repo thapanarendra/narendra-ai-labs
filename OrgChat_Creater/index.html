@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrgChart Creator Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Welcome Modal -->
+    <div id="welcomeModal" class="modal active">
+        <div class="modal-content welcome-modal">
+            <div class="modal-header">
+                <i class="fas fa-sitemap modal-icon"></i>
+                <h2>Welcome to OrgChart Creator Pro</h2>
+                <p>Build beautiful organizational charts in minutes</p>
+            </div>
+            <div class="modal-body">
+                <form id="companyForm">
+                    <div class="form-group">
+                        <label for="companyName">
+                            <i class="fas fa-building"></i> Account / Company Name
+                        </label>
+                        <input type="text" id="companyName" placeholder="Enter account or company name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="companyLogo">
+                            <i class="fas fa-image"></i> Logo (Optional - Drag & Drop)
+                        </label>
+                        <div class="logo-upload" id="logoDropZone">
+                            <input type="file" id="companyLogo" accept="image/*">
+                            <div class="upload-placeholder" id="logoPreview">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Click or drag image here</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-rocket"></i> Create Org Chart
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app" class="hidden">
+        <!-- Left Sidebar - Saved Charts -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="fas fa-sitemap"></i>
+                    <span>OrgChart Pro</span>
+                </div>
+                <div class="sidebar-header-actions">
+                    <button class="btn btn-icon sidebar-toggle" id="toggleSidebar" title="Hide Sidebar">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span><i class="fas fa-plus-circle"></i> New Chart</span>
+                </div>
+                <button class="btn btn-primary btn-block" id="newChartBtn">
+                    <i class="fas fa-plus"></i> Create New Chart
+                </button>
+                <button class="btn btn-secondary btn-block" id="importCSVBtn" style="margin-top: 8px;">
+                    <i class="fas fa-file-csv"></i> Import from CSV
+                </button>
+                <button class="btn btn-outline btn-block" id="downloadSampleCSVSidebar" style="margin-top: 8px;">
+                    <i class="fas fa-download"></i> Download Sample CSV
+                </button>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <span><i class="fas fa-folder"></i> Saved Charts</span>
+                    <span class="badge" id="chartCount">0</span>
+                </div>
+                <div class="saved-charts-list" id="savedChartsList">
+                    <div class="empty-charts-msg">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No saved charts yet</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Help & Tips Section -->
+            <div class="sidebar-section sidebar-help">
+                <div class="sidebar-section-header">
+                    <span><i class="fas fa-lightbulb"></i> Tips & Help</span>
+                </div>
+                <div class="help-tips">
+                    <div class="help-tip">
+                        <i class="fas fa-plus-circle"></i>
+                        <div>
+                            <strong>Create Chart</strong>
+                            <p>Click "Create New Chart" to start</p>
+                        </div>
+                    </div>
+                    <div class="help-tip">
+                        <i class="fas fa-user-plus"></i>
+                        <div>
+                            <strong>Add People</strong>
+                            <p>Click "Add Person" or hover cards for arrows</p>
+                        </div>
+                    </div>
+                    <div class="help-tip">
+                        <i class="fas fa-arrows-alt"></i>
+                        <div>
+                            <strong>Move Cards</strong>
+                            <p>Drag cards anywhere on the canvas</p>
+                        </div>
+                    </div>
+                    <div class="help-tip">
+                        <i class="fas fa-link"></i>
+                        <div>
+                            <strong>Connect People</strong>
+                            <p>Use arrows on cards to add reports/managers</p>
+                        </div>
+                    </div>
+                    <div class="help-tip">
+                        <i class="fas fa-keyboard"></i>
+                        <div>
+                            <strong>Shortcuts</strong>
+                            <p>Press <kbd>?</kbd> to see all keyboard shortcuts</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Show Sidebar Button (visible when sidebar hidden) -->
+        <button class="show-sidebar-btn" id="showSidebarBtn" title="Show Sidebar">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="btn btn-icon mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="current-chart-info">
+                        <img id="headerLogo" src="" alt="" class="header-logo hidden">
+                        <div class="chart-title-wrapper">
+                            <h1 id="headerCompanyName" class="chart-title">Untitled Chart</h1>
+                            <span class="chart-status" id="chartStatus">
+                                <i class="fas fa-check-circle"></i> Saved
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-icon" id="undoBtn" title="Undo (Ctrl+Z)" disabled>
+                        <i class="fas fa-undo"></i>
+                    </button>
+                    <button class="btn btn-icon" id="redoBtn" title="Redo (Ctrl+Y)" disabled>
+                        <i class="fas fa-redo"></i>
+                    </button>
+                    <div class="divider"></div>
+                    <button class="btn btn-icon" id="zoomOutBtn" title="Zoom Out">
+                        <i class="fas fa-search-minus"></i>
+                    </button>
+                    <span id="zoomLevel">100%</span>
+                    <button class="btn btn-icon" id="zoomInBtn" title="Zoom In">
+                        <i class="fas fa-search-plus"></i>
+                    </button>
+                    <button class="btn btn-icon" id="fitScreenBtn" title="Fit to Screen">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <div class="divider"></div>
+                    <button class="btn btn-secondary" id="saveChartBtn">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-primary" id="exportBtn">
+                            <i class="fas fa-download"></i> Export <i class="fas fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-menu" id="exportDropdown">
+                            <button class="dropdown-item" id="exportJSON">
+                                <i class="fas fa-code"></i> Export as JSON
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <!-- Add Person Dropdown -->
+                <div class="dropdown">
+                    <button class="toolbar-btn dropdown-toggle" id="addPersonDropdownBtn">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Add Person</span>
+                        <i class="fas fa-caret-down" style="margin-left: 4px; font-size: 10px;"></i>
+                    </button>
+                    <div class="dropdown-menu" id="addPersonDropdown">
+                        <button class="dropdown-item" id="addRootBtn">
+                            <i class="fas fa-user-plus"></i> Add Person Manually
+                        </button>
+                        <button class="dropdown-item" id="importCSVToolbarBtn">
+                            <i class="fas fa-file-csv"></i> Import from CSV
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" id="downloadSampleCSVToolbar">
+                            <i class="fas fa-download"></i> Download Sample CSV
+                        </button>
+                    </div>
+                </div>
+                <button class="toolbar-btn" id="selectAllBtn" title="Select All (Ctrl+A)">
+                    <i class="fas fa-object-group"></i>
+                    <span>Select All</span>
+                </button>
+                <button class="toolbar-btn" id="centerViewBtn">
+                    <i class="fas fa-crosshairs"></i>
+                    <span>Center View</span>
+                </button>
+                <div class="toolbar-divider"></div>
+                <!-- Zoom Controls -->
+                <div class="toolbar-group">
+                    <span class="toolbar-label">Zoom:</span>
+                    <button class="toolbar-btn-sm" id="toolbarZoomOut" title="Zoom Out (-)">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="zoom-level" id="toolbarZoomLevel">100%</span>
+                    <button class="toolbar-btn-sm" id="toolbarZoomIn" title="Zoom In (+)">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="toolbar-btn-sm" id="toolbarFitScreen" title="Fit to Screen">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
+                <div class="toolbar-divider"></div>
+                <div class="color-picker-group">
+                    <label>Card:</label>
+                    <input type="color" id="defaultColor" value="#4F46E5" title="Default Card Color">
+                </div>
+                <div class="color-picker-group">
+                    <label>Line:</label>
+                    <input type="color" id="lineColor" value="#6366F1" title="Connection Line Color">
+                </div>
+                <div class="toolbar-divider"></div>
+                <button class="toolbar-btn toggle-btn" id="gridSnapBtn" title="Toggle Grid Snap">
+                    <i class="fas fa-th"></i>
+                    <span>Grid</span>
+                </button>
+                <button class="toolbar-btn" id="fitAllBtn" title="Fit All Nodes">
+                    <i class="fas fa-compress-arrows-alt"></i>
+                    <span>Fit All</span>
+                </button>
+                <button class="toolbar-btn" id="autoLayoutBtn" title="Auto Arrange Hierarchy">
+                    <i class="fas fa-sitemap"></i>
+                    <span>Auto Layout</span>
+                </button>
+                <div class="toolbar-divider"></div>
+                <button class="toolbar-btn" id="clearAllBtn">
+                    <i class="fas fa-trash-alt"></i>
+                    <span>Clear</span>
+                </button>
+                <div class="toolbar-divider"></div>
+                <div class="toolbar-info">
+                    <span id="nodeCount">0 members</span>
+                    <span id="selectedCount" class="selected-count hidden">| 0 selected</span>
+                </div>
+            </div>
+
+            <!-- Main Canvas -->
+            <div class="canvas-container" id="canvasContainer">
+                <div class="canvas" id="canvas">
+                    <svg class="connections-svg" id="connectionsSvg"></svg>
+                    <div class="org-chart" id="orgChart">
+                        <!-- Org chart nodes will be rendered here -->
+                    </div>
+                    <!-- Selection Box for rubber band selection -->
+                    <div id="selectionBox" class="selection-box hidden"></div>
+                    <!-- Grid Overlay -->
+                    <div id="gridOverlay" class="grid-overlay hidden"></div>
+                </div>
+                <!-- Minimap -->
+                <div class="minimap" id="minimap">
+                    <div class="minimap-header">
+                        <span>Overview</span>
+                        <button class="minimap-toggle" id="minimapToggle" title="Toggle Minimap">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="minimap-content" id="minimapContent">
+                        <div class="minimap-viewport" id="minimapViewport"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <i class="fas fa-sitemap"></i>
+                <h3>Your org chart is empty</h3>
+                <p>Add your first team member to get started.<br>
+                <small style="color: #64748B;">Tip: Hover over a member and click the <strong>+</strong> buttons to add connected members</small></p>
+                <button class="btn btn-primary" id="emptyAddBtn">
+                    <i class="fas fa-plus"></i> Add First Person
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Person Modal -->
+    <div id="personModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="personModalTitle">Add New Member</h2>
+                <button class="modal-close" id="closePersonModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="personForm">
+                    <input type="hidden" id="personId">
+                    <input type="hidden" id="sourceNodeId">
+                    <input type="hidden" id="connectionDirection">
+                    
+                    <div class="photo-upload-section">
+                        <div class="photo-drop-zone" id="photoDropZone">
+                            <div class="photo-preview" id="photoPreview">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="drop-hint">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Drop image here</span>
+                            </div>
+                        </div>
+                        <input type="file" id="personPhoto" accept="image/*" class="hidden">
+                        <button type="button" class="btn btn-secondary btn-sm" id="uploadPhotoBtn">
+                            <i class="fas fa-camera"></i> Upload Photo
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" id="removePhotoBtn" style="display:none;">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="personName">
+                                <i class="fas fa-user"></i> Full Name *
+                            </label>
+                            <input type="text" id="personName" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="personDesignation">
+                                <i class="fas fa-briefcase"></i> Designation *
+                            </label>
+                            <input type="text" id="personDesignation" placeholder="CEO, Manager, etc." required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="personPhone">
+                                <i class="fas fa-phone"></i> Phone Number
+                            </label>
+                            <input type="tel" id="personPhone" placeholder="+1 234 567 8900">
+                        </div>
+                        <div class="form-group">
+                            <label for="personEmail">
+                                <i class="fas fa-envelope"></i> Email
+                            </label>
+                            <input type="email" id="personEmail" placeholder="john@company.com">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="personDepartment">
+                                <i class="fas fa-building"></i> Department
+                            </label>
+                            <input type="text" id="personDepartment" placeholder="Engineering, Sales, etc.">
+                        </div>
+                        <div class="form-group">
+                            <label for="personLocation">
+                                <i class="fas fa-map-marker-alt"></i> Location
+                            </label>
+                            <input type="text" id="personLocation" placeholder="New York, Remote, etc.">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nodeColor">
+                            <i class="fas fa-palette"></i> Card Color
+                        </label>
+                        <div class="color-options" id="colorOptions">
+                            <button type="button" class="color-option active" data-color="#4F46E5" style="background: #4F46E5"></button>
+                            <button type="button" class="color-option" data-color="#059669" style="background: #059669"></button>
+                            <button type="button" class="color-option" data-color="#DC2626" style="background: #DC2626"></button>
+                            <button type="button" class="color-option" data-color="#D97706" style="background: #D97706"></button>
+                            <button type="button" class="color-option" data-color="#7C3AED" style="background: #7C3AED"></button>
+                            <button type="button" class="color-option" data-color="#2563EB" style="background: #2563EB"></button>
+                            <button type="button" class="color-option" data-color="#DB2777" style="background: #DB2777"></button>
+                            <button type="button" class="color-option" data-color="#475569" style="background: #475569"></button>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelPersonBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check"></i> <span id="personSubmitText">Add Member</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Chart Modal -->
+    <div id="newChartModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Org Chart</h2>
+                <button class="modal-close" id="closeNewChartModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="newChartForm">
+                    <div class="form-group">
+                        <label for="newChartName">
+                            <i class="fas fa-building"></i> Account / Company Name
+                        </label>
+                        <input type="text" id="newChartName" placeholder="Enter account name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newChartLogo">
+                            <i class="fas fa-image"></i> Logo (Optional)
+                        </label>
+                        <div class="logo-upload" id="newLogoDropZone">
+                            <input type="file" id="newChartLogo" accept="image/*">
+                            <div class="upload-placeholder" id="newLogoPreview">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Click or drag to upload</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelNewChartBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Create Chart
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div id="contextMenu" class="context-menu hidden">
+        <ul>
+            <li id="ctxAddLeft">
+                <i class="fas fa-arrow-left"></i> Add to Left (Peer)
+            </li>
+            <li id="ctxAddRight">
+                <i class="fas fa-arrow-right"></i> Add to Right (Peer)
+            </li>
+            <li id="ctxAddTop">
+                <i class="fas fa-arrow-up"></i> Add Above (Manager)
+            </li>
+            <li id="ctxAddBottom">
+                <i class="fas fa-arrow-down"></i> Add Below (Report)
+            </li>
+            <li class="divider"></li>
+            <li id="ctxLinkTo">
+                <i class="fas fa-link"></i> Link to Another Member
+            </li>
+            <li class="divider"></li>
+            <li id="ctxEdit">
+                <i class="fas fa-edit"></i> Edit
+            </li>
+            <li id="ctxDuplicate">
+                <i class="fas fa-copy"></i> Duplicate
+            </li>
+            <li id="ctxChangePhoto">
+                <i class="fas fa-camera"></i> Change Photo
+            </li>
+            <li class="divider"></li>
+            <li id="ctxDelete" class="danger">
+                <i class="fas fa-trash"></i> Delete
+            </li>
+        </ul>
+    </div>
+
+    <!-- Chart Context Menu (for sidebar) -->
+    <div id="chartContextMenu" class="context-menu hidden">
+        <ul>
+            <li id="ctxChartOpen">
+                <i class="fas fa-folder-open"></i> Open
+            </li>
+            <li id="ctxChartRename">
+                <i class="fas fa-edit"></i> Rename
+            </li>
+            <li id="ctxChartDuplicate">
+                <i class="fas fa-copy"></i> Duplicate
+            </li>
+            <li id="ctxChartExport">
+                <i class="fas fa-download"></i> Export
+            </li>
+            <li class="divider"></li>
+            <li id="ctxChartDelete" class="danger">
+                <i class="fas fa-trash"></i> Delete
+            </li>
+        </ul>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- CSV Import Modal -->
+    <div id="csvImportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-file-csv"></i> Import from CSV</h2>
+                <button class="modal-close" id="closeCSVModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="csv-instructions">
+                    <p>Upload a CSV file with the following columns:</p>
+                    <code>Name, Designation, Manager, Email, Phone, Department, Location</code>
+                    <p class="small">The "Manager" column should contain the name of the person's manager to create connections.</p>
+                    <a href="#" class="sample-csv-link" id="downloadSampleCSV">
+                        <i class="fas fa-download"></i> Download Sample CSV Template
+                    </a>
+                </div>
+                <div class="form-group">
+                    <div class="csv-upload-zone" id="csvDropZone">
+                        <input type="file" id="csvFileInput" accept=".csv">
+                        <div class="upload-placeholder">
+                            <i class="fas fa-file-csv"></i>
+                            <span>Drop CSV file here or click to browse</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="csvPreview" class="csv-preview hidden">
+                    <h4>Preview (first 5 rows)</h4>
+                    <div class="csv-table-wrapper">
+                        <table id="csvPreviewTable"></table>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelCSVBtn">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="importCSVDataBtn" disabled>
+                        <i class="fas fa-upload"></i> Import Data
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Modal -->
+    <div id="shortcutsModal" class="modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2><i class="fas fa-keyboard"></i> Keyboard Shortcuts</h2>
+                <button class="modal-close" id="closeShortcutsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="shortcuts-grid">
+                    <div class="shortcut-group">
+                        <h4>Navigation</h4>
+                        <div class="shortcut"><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> Move between nodes</div>
+                        <div class="shortcut"><kbd>Enter</kbd> Edit selected node</div>
+                        <div class="shortcut"><kbd>Escape</kbd> Deselect all</div>
+                    </div>
+                    <div class="shortcut-group">
+                        <h4>Selection</h4>
+                        <div class="shortcut"><kbd>Ctrl</kbd>+<kbd>A</kbd> Select all</div>
+                        <div class="shortcut"><kbd>Shift</kbd>+<kbd>Click</kbd> Multi-select</div>
+                        <div class="shortcut"><kbd>Delete</kbd> Delete selected</div>
+                    </div>
+                    <div class="shortcut-group">
+                        <h4>Actions</h4>
+                        <div class="shortcut"><kbd>Ctrl</kbd>+<kbd>Z</kbd> Undo</div>
+                        <div class="shortcut"><kbd>Ctrl</kbd>+<kbd>Y</kbd> Redo</div>
+                        <div class="shortcut"><kbd>Ctrl</kbd>+<kbd>C</kbd> Copy</div>
+                        <div class="shortcut"><kbd>Ctrl</kbd>+<kbd>V</kbd> Paste</div>
+                    </div>
+                    <div class="shortcut-group">
+                        <h4>View</h4>
+                        <div class="shortcut"><kbd>+</kbd> / <kbd>-</kbd> Zoom in/out</div>
+                        <div class="shortcut"><kbd>0</kbd> Reset zoom</div>
+                        <div class="shortcut"><kbd>F</kbd> Fit all to view</div>
+                        <div class="shortcut"><kbd>G</kbd> Toggle grid snap</div>
+                        <div class="shortcut"><kbd>?</kbd> Show shortcuts</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drag Overlay -->
+    <div id="dragOverlay" class="drag-overlay hidden">
+        <div class="drag-overlay-content">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Drop image here to add photo</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
